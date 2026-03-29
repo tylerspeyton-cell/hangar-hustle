@@ -2016,7 +2016,7 @@ const Renderer = {
     if (!near) return;
 
     const sx = near.interactX - this.camX;
-    const sy = near.interactY * CFG.TILE - this.camY - 8;
+    const sy = near.interactY - this.camY - 8;
 
     // Bouncing prompt
     const bob = Math.sin(Date.now() / 400) * 4;
@@ -2039,7 +2039,7 @@ const Renderer = {
     let best = null, bestDist = CFG.INTERACT_DIST;
     for (const a of GS.aircraft) {
       if (a.status !== 'waiting') continue;
-      const dist = Math.hypot(Player.x - a.interactX, Player.y - a.interactY * CFG.TILE);
+      const dist = Math.hypot(Player.x - a.interactX, Player.y - a.interactY);
       if (dist < bestDist) { bestDist = dist; best = a; }
     }
     return best;
