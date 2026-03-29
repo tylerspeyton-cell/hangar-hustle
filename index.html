@@ -1,179 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Hangar Hustle: A&amp;P Shop Simulator</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Hangar Hustle — Aircraft Maintenance Simulator</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- ================================================ TITLE SCREEN -->
-<div id="screen-title" class="screen active">
-  <div class="title-wrap">
-    <div class="title-logo">
-      <div class="title-plane">✈</div>
-      <h1>HANGAR<br>HUSTLE</h1>
-      <p class="title-sub">A&amp;P Shop Simulator</p>
-    </div>
-    <div class="disclaimer">
-      ⚠️ <strong>Disclaimer:</strong> For entertainment and educational inspiration only.
-      Always verify current FAA regulations, approved data, and company procedures
-      for real-world maintenance.
-    </div>
-    <div class="title-menu">
-      <button class="btn-pixel btn-green" id="btn-career">▶ Career Mode</button>
-      <button class="btn-pixel btn-blue"  id="btn-rush">⏱ Rush Mode</button>
-      <button class="btn-pixel btn-gray"  id="btn-freeplay">★ Free Play</button>
-      <button class="btn-pixel btn-dark"  id="btn-achievements">🏆 Achievements</button>
-    </div>
-    <div id="save-slot-info" class="save-slot-info"></div>
-  </div>
-</div>
-
-<!-- ================================================ GAME SCREEN -->
-<div id="screen-game" class="screen">
-
-  <!-- HUD bar -->
-  <div id="hud">
-    <div id="hud-left">
-      <span class="hud-label">💰</span><span id="hud-money">$500</span>
-      <span class="hud-sep">|</span>
-      <span class="hud-label">Day</span><span id="hud-day">1</span>
-    </div>
-    <div id="hud-center">
-      <span id="hud-task">Walk to an aircraft to begin</span>
-    </div>
-    <div id="hud-right">
-      <span class="hud-label">⭐</span><span id="hud-rep">0</span>
-      <span class="hud-sep">|</span>
-      <span class="hud-label">❌</span><span id="hud-mistakes">0</span>
-      <button class="btn-pixel btn-sm" id="btn-pause">⏸</button>
+  <!-- ===== TITLE SCREEN ===== -->
+  <div id="title-screen" class="screen active">
+    <div class="title-inner">
+      <div class="title-logo">
+        <div class="logo-icon">✈</div>
+        <h1>HANGAR<span class="title-accent">HUSTLE</span></h1>
+        <p class="logo-sub">Aircraft Maintenance Simulator</p>
+      </div>
+      <div class="title-buttons">
+        <button class="btn btn-primary btn-xl" id="btn-career">▶ CAREER MODE</button>
+        <button class="btn btn-yellow btn-xl" id="btn-rush">⚡ RUSH MODE</button>
+        <button class="btn btn-outline btn-xl" id="btn-free-play">🔓 FREE PLAY</button>
+        <button class="btn btn-outline btn-xl" id="btn-load-game">💾 LOAD GAME</button>
+      </div>
+      <div class="title-mode-desc">
+        <div class="mode-card">
+          <h3>CAREER</h3>
+          <p>Build your shop from a basic toolbox to a full jet MRO. Unlock equipment, tackle bigger aircraft, grow your reputation.</p>
+        </div>
+        <div class="mode-card">
+          <h3>RUSH</h3>
+          <p>8-minute sprint — earn as much as possible before time runs out.</p>
+        </div>
+        <div class="mode-card">
+          <h3>FREE PLAY</h3>
+          <p>All aircraft and upgrades unlocked. Practice every job type.</p>
+        </div>
+      </div>
+      <p class="disclaimer">For entertainment and educational inspiration only. Always verify current FAA regulations, approved data, and company procedures for real-world maintenance.</p>
     </div>
   </div>
 
-  <!-- Rush mode timer -->
-  <div id="rush-timer-wrap" style="display:none">
-    <div id="rush-timer-bar"><div id="rush-timer-fill"></div></div>
-    <span id="rush-timer-text">8:00 AM</span>
-  </div>
+  <!-- ===== MAIN GAME SCREEN ===== -->
+  <div id="game-screen" class="screen">
 
-  <!-- Main canvas -->
-  <canvas id="game-canvas"></canvas>
-
-  <!-- Touch / D-pad controls -->
-  <div id="touch-controls">
-    <div id="dpad">
-      <button class="dpad-btn" data-dir="up"    id="dpad-up">▲</button>
-      <button class="dpad-btn" data-dir="left"  id="dpad-left">◀</button>
-      <div class="dpad-center"></div>
-      <button class="dpad-btn" data-dir="right" id="dpad-right">▶</button>
-      <button class="dpad-btn" data-dir="down"  id="dpad-down">▼</button>
+    <!-- TOP HUD BAR -->
+    <div id="hud-bar">
+      <div class="hud-left">
+        <span class="hud-money" id="hud-money">$0</span>
+        <span class="hud-sep">|</span>
+        <span class="hud-day" id="hud-day">Day 1</span>
+        <span class="hud-sep">|</span>
+        <span class="hud-rep" id="hud-rep">⭐ Rep: 0</span>
+      </div>
+      <div class="hud-center" id="hud-job-name">— HANGAR EMPTY —</div>
+      <div class="hud-right">
+        <button class="btn btn-sm btn-outline" id="btn-job-board">JOB BOARD</button>
+        <button class="btn btn-sm btn-yellow" id="btn-upgrades">UPGRADES</button>
+        <button class="btn btn-sm btn-outline" id="btn-pause">⏸</button>
+      </div>
     </div>
-    <button id="btn-interact-touch" class="btn-interact-touch">E</button>
-  </div>
 
-</div><!-- /screen-game -->
-
-<!-- ================================================ PAUSE MENU -->
-<div id="overlay-pause" class="overlay hidden">
-  <div class="modal">
-    <h2>PAUSED</h2>
-    <button class="btn-pixel btn-green" id="btn-resume">▶ Resume</button>
-    <button class="btn-pixel btn-blue"  id="btn-upgrades-from-pause">🔧 Upgrades</button>
-    <button class="btn-pixel btn-gray"  id="btn-save">💾 Save Game</button>
-    <button class="btn-pixel btn-red"   id="btn-quit-to-title">⏏ Quit</button>
-  </div>
-</div>
-
-<!-- ================================================ WORK ORDER PANEL -->
-<div id="overlay-workorder" class="overlay hidden">
-  <div class="modal modal-workorder">
-    <div class="wo-header">
-      <span class="wo-badge" id="wo-aircraft-badge">C172</span>
-      <h3>Work Order <span id="wo-number">#001</span></h3>
+    <!-- RUSH TIMER BAR -->
+    <div id="rush-timer-bar" class="hidden">
+      <span class="rush-label">⚡ TIME</span>
+      <div id="rush-track"><div id="rush-fill"></div></div>
+      <span id="rush-value">8:00</span>
     </div>
-    <p class="wo-job-name" id="wo-job-name">Oil Service</p>
-    <p class="wo-description" id="wo-description"></p>
-    <div class="wo-stats">
-      <span>💰 Est. Pay: <strong id="wo-pay">$0</strong></span>
-      <span>⏱ Difficulty: <span id="wo-difficulty">★☆☆</span></span>
+
+    <!-- MAIN GAME AREA (sidebar + canvas + parts panel) -->
+    <div id="main-area">
+
+      <!-- LEFT SIDEBAR: Equipment / Tools -->
+      <div id="left-sidebar">
+        <div class="sidebar-label">SHOP</div>
+        <div id="equipment-icons">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- CENTER: Hangar Canvas -->
+      <div id="canvas-wrapper">
+        <canvas id="hangar-canvas"></canvas>
+      </div>
+
+      <!-- RIGHT: Parts Panel (slides in) -->
+      <div id="parts-panel" class="hidden">
+        <div id="parts-panel-header">
+          <div id="parts-zone-title">ENGINE</div>
+          <button class="btn btn-sm btn-outline" id="btn-close-parts">✕</button>
+        </div>
+        <div id="parts-panel-body">
+          <button class="btn btn-primary btn-full" id="btn-inspect-all">🔍 INSPECT ALL</button>
+          <div id="parts-list">
+            <!-- Part rows populated by JS -->
+          </div>
+        </div>
+        <div id="parts-panel-footer">
+          <button class="btn btn-green btn-full hidden" id="btn-complete-job">
+            ✔ COMPLETE JOB &nbsp;—&nbsp; $<span id="complete-pay">0</span>
+          </button>
+        </div>
+      </div>
+
     </div>
-    <div id="wo-event-banner" class="wo-event-banner hidden"></div>
-    <div class="wo-actions">
-      <button class="btn-pixel btn-green" id="btn-accept-job">✔ Accept Job</button>
-      <button class="btn-pixel btn-red"   id="btn-decline-job">✘ Decline</button>
+
+    <!-- ZONE BUTTONS (below canvas, always usable on mobile) -->
+    <div id="zone-buttons-row" class="hidden">
+      <button class="zone-btn" data-zone="engine">ENGINE</button>
+      <button class="zone-btn" data-zone="cockpit">COCKPIT</button>
+      <button class="zone-btn" data-zone="avionics" id="zone-btn-avionics">AVIONICS</button>
+      <button class="zone-btn" data-zone="gear">GEAR</button>
+      <button class="zone-btn" data-zone="wings">WINGS</button>
+      <button class="zone-btn" data-zone="tail">TAIL</button>
+    </div>
+
+  </div>
+
+  <!-- ===== JOB BOARD MODAL ===== -->
+  <div id="modal-job-board" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>📋 JOB BOARD</h2>
+        <button class="btn btn-sm btn-outline" id="btn-close-jobs">✕</button>
+      </div>
+      <div id="job-list"></div>
     </div>
   </div>
-</div>
 
-<!-- ================================================ MINI-GAME OVERLAY -->
-<div id="overlay-minigame" class="overlay hidden">
-  <div class="modal modal-minigame" id="minigame-modal">
-    <div class="mg-header">
-      <h3 id="mg-title">Mini-Game</h3>
-      <p id="mg-instructions"></p>
-    </div>
-    <div id="mg-content"></div>
-    <div id="mg-result" class="hidden">
-      <div id="mg-result-text"></div>
-      <button class="btn-pixel btn-green" id="btn-mg-continue">Continue →</button>
+  <!-- ===== UPGRADES MODAL ===== -->
+  <div id="modal-upgrades" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>🔧 SHOP UPGRADES</h2>
+        <button class="btn btn-sm btn-outline" id="btn-close-upgrades">✕</button>
+      </div>
+      <p class="upgrade-balance">Balance: <strong id="upgrade-balance-val">$0</strong></p>
+      <div id="upgrade-list"></div>
     </div>
   </div>
-</div>
 
-<!-- ================================================ DECISION CARD -->
-<div id="overlay-decision" class="overlay hidden">
-  <div class="modal modal-decision">
-    <div class="decision-header">
-      <span class="decision-tag">📋 DECISION REQUIRED</span>
-      <h3 id="dc-title"></h3>
+  <!-- ===== JOB COMPLETE POPUP ===== -->
+  <div id="job-complete-popup" class="modal hidden">
+    <div class="modal-box modal-sm">
+      <h2 id="jc-title">✔ JOB COMPLETE</h2>
+      <div id="jc-breakdown" class="jc-breakdown"></div>
+      <div id="jc-total" class="jc-total"></div>
+      <button class="btn btn-primary btn-full" id="btn-jc-ok">NEXT JOB</button>
     </div>
-    <p id="dc-scenario" class="dc-scenario"></p>
-    <div id="dc-options" class="dc-options"></div>
-    <p class="dc-disclaimer">Educational content only — always consult actual approved data.</p>
   </div>
-</div>
 
-<!-- ================================================ UPGRADE SHOP -->
-<div id="screen-upgrades" class="screen">
-  <div class="shop-header">
-    <button class="btn-pixel btn-gray" id="btn-close-upgrades">← Back</button>
-    <h2>🔧 Shop Upgrades</h2>
-    <span class="budget-label">Budget: 💰 $<span id="upgrade-budget">0</span></span>
+  <!-- ===== DAY END POPUP ===== -->
+  <div id="day-end-popup" class="modal hidden">
+    <div class="modal-box modal-sm">
+      <h2>END OF DAY <span id="day-end-num">1</span></h2>
+      <div id="day-end-stats" class="jc-breakdown"></div>
+      <button class="btn btn-primary btn-full" id="btn-next-day">
+        START DAY <span id="next-day-num">2</span>
+      </button>
+    </div>
   </div>
-  <div id="upgrade-list" class="upgrade-list"></div>
-</div>
 
-<!-- ================================================ ACHIEVEMENTS SCREEN -->
-<div id="screen-achievements" class="screen">
-  <div class="shop-header">
-    <button class="btn-pixel btn-gray" id="btn-close-achievements">← Back</button>
-    <h2>🏆 Achievements</h2>
-    <span class="budget-label"><span id="ach-count">0</span> / <span id="ach-total">0</span> unlocked</span>
+  <!-- ===== PAUSE OVERLAY ===== -->
+  <div id="pause-overlay" class="modal hidden">
+    <div class="modal-box modal-sm">
+      <h2>⏸ PAUSED</h2>
+      <button class="btn btn-primary btn-full" id="btn-resume">RESUME</button>
+      <button class="btn btn-outline btn-full" id="btn-save">SAVE GAME</button>
+      <button class="btn btn-danger btn-full" id="btn-quit-main">QUIT TO MENU</button>
+    </div>
   </div>
-  <div id="achievements-list" class="achievements-list"></div>
-</div>
 
-<!-- ================================================ END OF DAY SUMMARY -->
-<div id="overlay-day-summary" class="overlay hidden">
-  <div class="modal modal-summary">
-    <h2>End of Day <span id="summary-day">1</span></h2>
-    <div id="summary-stats" class="summary-stats"></div>
-    <div id="summary-achievements" class="summary-achievements"></div>
-    <button class="btn-pixel btn-green" id="btn-next-day">Next Day →</button>
+  <!-- ===== ACHIEVEMENT TOAST ===== -->
+  <div id="achievement-toast" class="hidden">
+    <span class="toast-icon">🏆</span>
+    <div class="toast-text">
+      <div class="toast-title">ACHIEVEMENT UNLOCKED</div>
+      <div id="toast-name">—</div>
+    </div>
   </div>
-</div>
 
-<!-- ================================================ TOAST CONTAINER -->
-<div id="toast-container"></div>
+  <!-- ===== EVENT BANNER ===== -->
+  <div id="event-banner" class="hidden">
+    <span id="event-banner-text">⚡ RUSH JOB — 2× PAY!</span>
+  </div>
 
-<!-- ================================================ ROTATE NOTICE -->
-<div id="rotate-notice" class="hidden">
-  <div>📱 Rotate your device to landscape for the best experience</div>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
