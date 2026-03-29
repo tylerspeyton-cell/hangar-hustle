@@ -726,6 +726,144 @@ html, body {
 }
 
 /* ============================================================
+   DESKTOP TUNING
+   ============================================================ */
+@media (min-width: 1024px) {
+  .title-inner {
+    max-width: 980px;
+    gap: 24px;
+  }
+
+  .title-buttons {
+    max-width: 760px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 12px;
+  }
+
+  .btn-xl {
+    width: 100%;
+    font-size: 15px;
+    padding: 14px 16px;
+  }
+
+  .title-mode-desc {
+    gap: 14px;
+  }
+
+  .mode-card {
+    padding: 14px 14px;
+  }
+
+  .mode-card p {
+    font-size: 11px;
+  }
+
+  #hud-bar {
+    height: 54px;
+    padding: 0 16px;
+  }
+
+  .hud-money { font-size: 18px; }
+  .hud-day { font-size: 14px; }
+  .hud-rep { font-size: 13px; }
+  .hud-center { font-size: 14px; }
+
+  #main-area {
+    background: linear-gradient(180deg, #15181d 0%, #101216 100%);
+  }
+
+  #left-sidebar {
+    width: 104px;
+    padding: 10px 8px;
+    gap: 8px;
+    border-right: 2px solid var(--border);
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+  }
+
+  .equip-icon {
+    width: 72px;
+    height: 64px;
+    gap: 4px;
+    border-radius: 8px;
+  }
+
+  .equip-icon .equip-emoji {
+    font-size: 24px;
+  }
+
+  .equip-icon .equip-name {
+    font-size: 8px;
+  }
+
+  #canvas-wrapper {
+    border-left: 1px solid #0f1114;
+    border-right: 1px solid #0f1114;
+  }
+
+  #parts-panel {
+    width: 400px;
+    border-left: 2px solid var(--border-light);
+    box-shadow: -10px 0 24px rgba(0, 0, 0, 0.35);
+  }
+
+  #parts-panel-header {
+    padding: 12px 14px;
+  }
+
+  #parts-zone-title {
+    font-size: 15px;
+  }
+
+  #parts-panel-body {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .part-row {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  .part-name { font-size: 12px; }
+  .part-cost, .part-status { font-size: 11px; }
+
+  .part-action-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+    min-height: 28px;
+  }
+
+  #parts-panel-footer {
+    padding: 12px;
+  }
+
+  #zone-buttons-row {
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .zone-btn {
+    font-size: 12px;
+    min-width: 112px;
+    max-width: 180px;
+    padding: 9px 14px;
+  }
+
+  .btn-sm {
+    font-size: 12px;
+    padding: 6px 11px;
+  }
+
+  .modal-box {
+    max-width: 760px;
+  }
+}
+
+/* ============================================================
    UTILITY
    ============================================================ */
 .hidden { display: none !important; }
